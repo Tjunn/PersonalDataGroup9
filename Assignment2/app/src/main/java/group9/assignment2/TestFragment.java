@@ -34,10 +34,6 @@ public class TestFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_test, container, false);
 
-        //if (mListener != null) mListener.onResult(123);
-        //super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_start);
-
         // Bind buttons
         btStart = (Button) view.findViewById(R.id.bt_start);
         btTest = (Button) view.findViewById(R.id.bt_test);
@@ -205,4 +201,10 @@ public class TestFragment extends Fragment {
         startNewColorChangerThread();
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if(colorChanger != null)
+            colorChanger.interrupt();
+    }
 }

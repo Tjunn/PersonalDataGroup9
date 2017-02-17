@@ -22,13 +22,12 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <fragment
-            android:id="@+id/activity_main_fragment"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            android:layout_marginTop="?attr/actionBarSize"
-            android:name="group9.assignment2.TestFragment"
-            tools:layout="@layout/fragment_test"/>
+    <FrameLayout android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:layout_marginTop="?attr/actionBarSize"
+                 android:id="@+id/activity_main_fragment">
+    </FrameLayout>
+
 
     <!--android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

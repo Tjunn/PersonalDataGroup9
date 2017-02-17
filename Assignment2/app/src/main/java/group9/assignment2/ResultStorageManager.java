@@ -4,10 +4,7 @@ import android.content.Context;
 
 import java.io.*;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Helper class for providing sample content for user interfaces created by
@@ -79,6 +76,7 @@ public class ResultStorageManager {
             }
         }
 
+        Collections.reverse(items);
         return items;
     }
 

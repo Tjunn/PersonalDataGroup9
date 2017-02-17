@@ -19,6 +19,8 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, ResultsFragment.OnListFragmentInteractionListener , TestFragment.TestFragmentInteractionListener {
 
+    private boolean inResults = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,12 +32,14 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-
                 fab.hide();
             }
         });*/
+
+        TestFragment testFragment = new TestFragment();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.activity_main_fragment, testFragment);
+        fragmentTransaction.commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -57,7 +61,17 @@ public class MainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+            return;
         }
+
+        if (getFragmentManager().getBackStackEntryCount() > 0) {
+            getFragmentManager().popBackStack();
+            inResults = false;
+        } else {
+            //super.onBackPressed();
+            return;
+        }
+
     }
 
     @Override
@@ -88,7 +102,8 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_results) {
+        if (id == R.id.nav_results && !inResults) {
+            inResults = true;
             // Create new fragment and transaction
             Fragment resultsFragment = new ResultsFragment();
             FragmentManager fragmentManager = getFragmentManager();
@@ -96,6 +111,7 @@ public class MainActivity extends AppCompatActivity
 
             // Replace whatever is in the fragment_container view with this fragment,
             // and add the transaction to the back stack if needed
+            //transaction.remove(getFragmentManager().findFragmentByTag("test"));
             transaction.replace(R.id.activity_main_fragment, resultsFragment);
 
             if(fragmentManager.getBackStackEntryCount()==0) //TODO: If we add more fragments handle this
