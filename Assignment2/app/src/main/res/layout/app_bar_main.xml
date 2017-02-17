@@ -26,15 +26,16 @@
             android:id="@+id/activity_main_fragment"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:name="group9.assignment2.ResultsFragment"
-            tools:layout="@layout/fragment_result"/>
+            android:layout_marginTop="?attr/actionBarSize"
+            android:name="group9.assignment2.TestFragment"
+            tools:layout="@layout/fragment_test"/>
 
-    <android.support.design.widget.FloatingActionButton
+    <!--android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_alert" />
+        app:srcCompat="@android:drawable/ic_dialog_alert" /-->
 
 </android.support.design.widget.CoordinatorLayout>

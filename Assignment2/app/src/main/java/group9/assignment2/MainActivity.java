@@ -1,5 +1,6 @@
 package group9.assignment2;
 
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.Fragment;
 
@@ -25,26 +26,16 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        /*final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                // Create new fragment and transaction
-                Fragment testFragment = new TestFragment();
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
-                // Replace whatever is in the fragment_container view with this fragment,
-                // and add the transaction to the back stack if needed
-                transaction.replace(R.id.activity_main_fragment, testFragment);
-                transaction.addToBackStack(null);
-
-                // Commit the transaction
-                transaction.commit();
 
                 fab.hide();
             }
-        });
+        });*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -97,9 +88,24 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        /*if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_results) {
+            // Create new fragment and transaction
+            Fragment resultsFragment = new ResultsFragment();
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+            // Replace whatever is in the fragment_container view with this fragment,
+            // and add the transaction to the back stack if needed
+            transaction.replace(R.id.activity_main_fragment, resultsFragment);
+
+            if(fragmentManager.getBackStackEntryCount()==0) //TODO: If we add more fragments handle this
+                transaction.addToBackStack("results");
+
+            // Commit the transaction
+            transaction.commit();
+        }
+        /* else if (id == R.id.nav_gallery) {
+
 
         } else if (id == R.id.nav_slideshow) {
 

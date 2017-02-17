@@ -1,8 +1,8 @@
 package group9.assignment2;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -65,7 +65,7 @@ public class ResultsFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new ResultItemRecyclerViewAdapter(ResultStorageManager.getItems(getContext()), mListener));
+            recyclerView.setAdapter(new ResultItemRecyclerViewAdapter(ResultStorageManager.getItems(context), mListener));
         }
         return view;
     }

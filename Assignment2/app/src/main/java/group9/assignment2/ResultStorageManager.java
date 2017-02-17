@@ -28,7 +28,8 @@ public class ResultStorageManager {
     public static void addResult(Context context, long result){
 
         ResultItem item = new ResultItem(result);
-        items.add(item);
+        if(items != null)
+            items.add(item);
 
         FileOutputStream fos;
         try {
