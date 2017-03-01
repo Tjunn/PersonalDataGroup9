@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_boom"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    tools:context="com.devslopes.assignment3.Boom">
+
+    <Button
+        android:text="Right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btRight"
+        android:layout_alignBaseline="@+id/btLeft"
+        android:layout_alignBottom="@+id/btLeft"
+        android:layout_alignParentEnd="true" />
+
+    <ImageView
+        android:layout_height="150dp"
+        app:srcCompat="@drawable/nyancat"
+        android:id="@+id/nyanCat"
+        android:layout_marginLeft="115dp"
+        android:layout_width="150dp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="false" />
+
+    <Button
+        android:text="Instant"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btInstant"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/btLeft"
+        android:textColor="@android:color/background_light"
+        android:visibility="visible"
+        android:background="@android:color/holo_green_light" />
+
+    <Button
+        android:text=" Not instant "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btNotInstant"
+        android:background="@android:color/holo_red_light"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@+id/btRight"
+        android:textColor="@android:color/background_light" />
+
+    <TextView
+        android:text="Age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/txGender"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/txAge" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/edAge"
+        android:layout_below="@+id/txAge"
+        android:layout_alignStart="@+id/txAge" />
+
+    <TextView
+        android:text="Gender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:id="@+id/txGender"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="15dp" />
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txGender"
+        android:layout_alignStart="@+id/txGender"
+        android:id="@+id/rgGender" >
+
+        <RadioButton
+            android:text="Male"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rbMale"
+            android:layout_weight="1" />
+
+        <RadioButton
+            android:text="Female"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rbFemale"
+            android:layout_weight="1"
+            android:checked="true" />
+    </RadioGroup>
+
+    <Button
+        android:text="Left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btLeft"
+        android:layout_below="@+id/nyanCat"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="64dp" />
+
+</RelativeLayout>
