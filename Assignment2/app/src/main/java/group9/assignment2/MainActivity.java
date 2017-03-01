@@ -16,10 +16,18 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.Stack;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, ResultsFragment.OnListFragmentInteractionListener , TestFragment.TestFragmentInteractionListener {
 
     private boolean inResults = false;
+
+    private Stack<Screen> backStack = new Stack<>();
+    private Screen curentScreen;
+    private enum Screen{
+        LIST, USAGE_STATS, TEST
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +44,7 @@ public class MainActivity extends AppCompatActivity
             }
         });*/
 
-        TestFragment testFragment = new TestFragment();
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.activity_main_fragment, testFragment);
-        fragmentTransaction.commit();
+        changeScreen(Screen.TEST);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -54,6 +59,39 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    private void changeScreen(Screen newScreen){
+        if(curentScreen == newScreen)
+            return;
+
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        Fragment newFragment;
+
+        backStack.push(curentScreen);
+        switch (newScreen){
+            case TEST:
+                curentScreen = Screen.TEST;
+                newFragment = new TestFragment();
+                break;
+            case LIST:
+                curentScreen = Screen.LIST;
+                newFragment = new ResultsFragment();
+                break;
+            case USAGE_STATS:
+                curentScreen = Screen.USAGE_STATS;
+                newFragment = new UsageStatsFragment();
+                break;
+            default:
+                throw new IllegalArgumentException("Screen not recognized");
+        }
+
+
+
+        transaction.replace(R.id.activity_main_fragment, newFragment);
+        transaction.commit();
+
+
+    }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -64,12 +102,9 @@ public class MainActivity extends AppCompatActivity
             return;
         }
 
-        if (getFragmentManager().getBackStackEntryCount() > 0) {
-            getFragmentManager().popBackStack();
-            inResults = false;
-        } else {
-            //super.onBackPressed();
-            return;
+
+        if (!backStack.empty()){
+            changeScreen(backStack.pop());
         }
 
     }
@@ -102,28 +137,13 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_results && !inResults) {
-            inResults = true;
-            // Create new fragment and transaction
-            Fragment resultsFragment = new ResultsFragment();
-            FragmentManager fragmentManager = getFragmentManager();
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-
-            // Replace whatever is in the fragment_container view with this fragment,
-            // and add the transaction to the back stack if needed
-            //transaction.remove(getFragmentManager().findFragmentByTag("test"));
-            transaction.replace(R.id.activity_main_fragment, resultsFragment);
-
-            if(fragmentManager.getBackStackEntryCount()==0) //TODO: If we add more fragments handle this
-                transaction.addToBackStack("results");
-
-            // Commit the transaction
-            transaction.commit();
+        if (id == R.id.nav_results) {
+            changeScreen(Screen.LIST);
         }
-        /* else if (id == R.id.nav_gallery) {
-
-
-        } else if (id == R.id.nav_slideshow) {
+        else if (id == R.id.nav_usage_stats) {
+            changeScreen(Screen.USAGE_STATS);
+        }
+        /* else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
 

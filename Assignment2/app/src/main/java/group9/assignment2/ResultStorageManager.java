@@ -1,5 +1,7 @@
 package group9.assignment2;
 
+import android.app.usage.UsageStats;
+import android.app.usage.UsageStatsManager;
 import android.content.Context;
 
 import java.io.*;
@@ -50,6 +52,18 @@ public class ResultStorageManager {
 
     }
 
+    public static List<UsageStats> getUsageStats(Context context){
+        UsageStatsManager usageStatsManager=(UsageStatsManager)context.getSystemService(Context.USAGE_STATS_SERVICE);;
+
+        Calendar beginCal = Calendar.getInstance();
+
+        Calendar endCal = Calendar.getInstance();
+        endCal.roll(Calendar.YEAR,-2);
+
+        List<UsageStats> queryUsageStats=usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_YEARLY, beginCal.getTimeInMillis(), endCal.getTimeInMillis());
+        return queryUsageStats;
+    }
+
     public static List<ResultItem> getItems(Context context) {
         if(items == null){
             items = new ArrayList<>();
@@ -93,6 +107,11 @@ public class ResultStorageManager {
 
             Calendar c = Calendar.getInstance();
             this.time = c.getTimeInMillis();
+        }
+
+        public ResultItem(long time, long result) {
+            this.result = result;
+            this.time = time;
         }
 
         ResultItem(String line) {

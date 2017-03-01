@@ -1,0 +1,54 @@
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:orientation="vertical">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+        <TextView
+                android:gravity="right"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="DD/MM/YYYY"
+                android:id="@+id/item_usage_start"
+                tools:ignore="RtlHardcoded"/>
+
+        <TextView
+                android:gravity="center"
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
+                android:text=" to "
+        />
+
+        <TextView
+                android:gravity="left"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="DD/MM/YYYY"
+                android:id="@+id/item_usage_end"
+                tools:ignore="RtlHardcoded"
+        />
+    </LinearLayout>
+
+    <TextView
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Package Name"
+            android:id="@+id/item_usage_package"
+    />
+    <TextView
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="10000 min"
+            android:id="@+id/item_usage_time"
+    />
+</LinearLayout>
