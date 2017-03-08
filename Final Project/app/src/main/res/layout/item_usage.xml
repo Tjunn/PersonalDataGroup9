@@ -1,0 +1,90 @@
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_height="@dimen/row_height_twoItem"
+        android:layout_width="match_parent">
+    <ImageView
+            android:id="@+id/item_usage_avatar"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_width="@dimen/avatar_size"
+            android:layout_height="@dimen/avatar_size"
+            android:layout_centerVertical="true"
+            tools:src="@android:drawable/btn_star_big_on"
+    />
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_toStartOf="@+id/item_usage_time"
+                  android:layout_marginStart="72dp"
+                  android:orientation="vertical"
+                  android:layout_centerVertical="true"
+    >
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:text="App Label"
+                android:textSize="16sp"
+                android:id="@+id/item_usage_package"
+                android:textColor="@color/primaryTextColor"
+        />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="YYYY-MM-DD"
+                android:textSize="14sp"
+                android:textColor="@color/secondaryTextColor"
+                android:id="@+id/item_usage_start"/>
+    </LinearLayout>
+
+
+    <!--LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+        <TextView
+                android:gravity="right"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="YYYY-MM-DD"
+                android:id="@+id/item_usage_start"
+                tools:ignore="RtlHardcoded"/>
+
+        <TextView
+                android:gravity="center"
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
+                android:text=" to "
+        />
+
+        <TextView
+                android:gravity="left"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="YYYY-MM-DD"
+                android:id="@+id/item_usage_end"
+                tools:ignore="RtlHardcoded"
+        />
+    </LinearLayout-->
+
+
+    <TextView
+            android:id="@id/item_usage_time"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="100.1 min"
+            android:textSize="20sp"
+            android:textColor="@color/primaryTextColor"
+
+    />
+
+</RelativeLayout>
