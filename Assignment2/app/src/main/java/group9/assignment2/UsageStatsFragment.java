@@ -57,7 +57,7 @@ public class UsageStatsFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new UsageStatsRecyclerViewAdapter(ResultStorageManager.getUsageStats(context), null));
+            recyclerView.setAdapter(new UsageStatsRecyclerViewAdapter(ResultStorageManager.getUsageStats(context), null, getActivity().getPackageManager()));
         }
         return view;
     }

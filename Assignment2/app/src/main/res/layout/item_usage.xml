@@ -1,9 +1,32 @@
-<LinearLayout
+<RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:orientation="vertical">
+        android:layout_width="match_parent">
+    <ImageView
+            android:id="@+id/item_usage_avatar"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            tools:src="@android:drawable/btn_star_big_on"
+    />
+
+<LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_toEndOf="@id/item_usage_avatar"
+        android:layout_centerVertical="true"
+        android:orientation="vertical" >
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Package Name"
+            android:id="@+id/item_usage_package"
+    />
 
     <LinearLayout
             android:layout_width="match_parent"
@@ -14,7 +37,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="DD/MM/YYYY"
+                android:text="DD-MM-YYYY"
                 android:id="@+id/item_usage_start"
                 tools:ignore="RtlHardcoded"/>
 
@@ -31,7 +54,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="DD/MM/YYYY"
+                android:text="DD-MM-YYYY"
                 android:id="@+id/item_usage_end"
                 tools:ignore="RtlHardcoded"
         />
@@ -41,14 +64,9 @@
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Package Name"
-            android:id="@+id/item_usage_package"
-    />
-    <TextView
-            android:gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="10000 min"
+            android:text="10000"
             android:id="@+id/item_usage_time"
     />
 </LinearLayout>
+
+</RelativeLayout>
