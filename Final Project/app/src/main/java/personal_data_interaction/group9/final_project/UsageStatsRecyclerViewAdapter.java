@@ -53,9 +53,12 @@ public class UsageStatsRecyclerViewAdapter extends RecyclerView.Adapter<UsageSta
 
         holder.name.setText(item.getLabel());
 
-        holder.start.setText(String.format(Locale.getDefault(),"%tF",item.getStart()));
+        //holder.start.setText(String.format(Locale.getDefault(),"%tF",item.getStart()));
+        holder.start.setText(String.format(Locale.ROOT,"%tc",item.getStart()));
 
         //holder.end.setText(String.format(Locale.getDefault(),"%tF",item.getEnd()));
+        holder.end.setText(String.format(Locale.ROOT,"%tc",item.getEnd()));
+
 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,7 +92,7 @@ public class UsageStatsRecyclerViewAdapter extends RecyclerView.Adapter<UsageSta
 
             this.view = view;
             start = (TextView) view.findViewById(R.id.item_usage_start);
-            //end = (TextView) view.findViewById(R.id.item_usage_end);
+            end = (TextView) view.findViewById(R.id.item_usage_end);
             name = (TextView) view.findViewById(R.id.item_usage_package);
             time = (TextView) view.findViewById(R.id.item_usage_time);
             avatar = (ImageView) view.findViewById(R.id.item_usage_avatar);

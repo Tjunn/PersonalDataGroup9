@@ -37,6 +37,13 @@
                 android:textSize="14sp"
                 android:textColor="@color/secondaryTextColor"
                 android:id="@+id/item_usage_start"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="YYYY-MM-DD"
+                android:textSize="14sp"
+                android:textColor="@color/secondaryTextColor"
+                android:id="@+id/item_usage_end"/>
     </LinearLayout>
 
 

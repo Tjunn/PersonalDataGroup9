@@ -3,6 +3,10 @@ package personal_data_interaction.group9.final_project;
 import android.app.FragmentTransaction;
 import android.app.Fragment;
 
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,6 +22,7 @@ import java.util.Stack;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
+    private static int jobID = 0xdd7f5d51;
     private Stack<Screen> backStack = new Stack<>();
     private Screen currentScreen;
     private enum Screen{
@@ -50,8 +55,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        startDataCollectionService();
+    }
 
+    private void startDataCollectionService(){
 
+        Context context = getApplicationContext();
+        JobScheduler scheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+
+        //Check that job is running
+        /*for(JobInfo jobInfo : scheduler.getAllPendingJobs()){
+            if(jobInfo.getId() == jobID)
+                return;
+        }*/
+
+        //Stop All
+        scheduler.cancelAll();
+
+        //Start new job
+        ComponentName serviceName = new ComponentName(context, GranularDataJobService.class);
+        JobInfo info = new JobInfo.Builder(jobID,serviceName)
+                .setPeriodic(1000*60)
+                .setPersisted(true)
+                .build();
+
+        scheduler.schedule(info);
     }
 
     private void changeScreen(Screen newScreen){

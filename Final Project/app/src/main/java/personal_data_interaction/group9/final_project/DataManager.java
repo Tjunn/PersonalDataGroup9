@@ -2,6 +2,7 @@ package personal_data_interaction.group9.final_project;
 
 import android.app.AppOpsManager;
 import android.app.usage.UsageStats;
+import android.app.usage.UsageStatsManager;
 import android.content.Context;
 
 import java.util.*;
@@ -42,18 +43,34 @@ public class DataManager {
         }
     }
 
-    static List<UsageStatsItem> getUsageStats(final Context context){
-
-        checkForUsageStatsPermission(context);
-
-        android.app.usage.UsageStatsManager usageStatsManager=(android.app.usage.UsageStatsManager)context.getSystemService(Context.USAGE_STATS_SERVICE);
+    static List<UsageStatsItem> getLastWeekUsageStats(final Context context){
 
         Calendar beginCal = Calendar.getInstance();
         beginCal.roll(Calendar.WEEK_OF_YEAR,-1);
 
         Calendar endCal = Calendar.getInstance();
 
-        List<UsageStats> queryUsageStats=usageStatsManager.queryUsageStats(android.app.usage.UsageStatsManager.INTERVAL_DAILY, beginCal.getTimeInMillis(), endCal.getTimeInMillis());
+        return getUsageStats(context,beginCal,endCal);
+    }
+
+    static List<UsageStatsItem> getDayUsageStats(final Context context){
+
+        Calendar beginCal = Calendar.getInstance();
+        beginCal.roll(Calendar.DATE,-1);
+
+
+        Calendar endCal = Calendar.getInstance();
+
+
+        return getUsageStats(context,beginCal,endCal);
+    }
+
+    static List<UsageStatsItem> getUsageStats(final Context context, Calendar beginCal, Calendar endCal){
+
+        checkForUsageStatsPermission(context);
+        android.app.usage.UsageStatsManager usageStatsManager=(android.app.usage.UsageStatsManager)context.getSystemService(Context.USAGE_STATS_SERVICE);
+
+        List<UsageStats> queryUsageStats=usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, beginCal.getTimeInMillis(), endCal.getTimeInMillis());
 
         List<UsageStatsItem> UsageStatsItems = Stream
                 .of(queryUsageStats)
