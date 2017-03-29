@@ -54,11 +54,14 @@ public class UsageStatsRecyclerViewAdapter extends RecyclerView.Adapter<UsageSta
         holder.name.setText(item.getLabel());
 
         //holder.start.setText(String.format(Locale.getDefault(),"%tF",item.getStart()));
-        holder.start.setText(String.format(Locale.ROOT,"%tc",item.getStart()));
+        //holder.start.setText(String.format(Locale.ROOT,"%tc",item.getStart()));
+        holder.start.setText(String.format(Locale.getDefault(),"%1$td %1$tb %1$tT",item.getStart()));
+        //holder.start.setText(String.format(Locale.ROOT,"%1$td %1$tb %1$tT %1$tZ",item.getStart()));
 
         //holder.end.setText(String.format(Locale.getDefault(),"%tF",item.getEnd()));
-        holder.end.setText(String.format(Locale.ROOT,"%tc",item.getEnd()));
-
+        //holder.end.setText(String.format(Locale.ROOT,"%tc",item.getEnd()));
+        holder.end.setText(String.format(Locale.getDefault(),"%1$td %1$tb %1$tT",item.getEnd()));
+        //holder.end.setText(String.format(Locale.ROOT,"%1$td %1$tb %1$tT %1$tZ",item.getEnd()));
 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override

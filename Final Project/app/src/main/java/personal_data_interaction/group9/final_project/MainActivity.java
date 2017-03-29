@@ -3,9 +3,7 @@ package personal_data_interaction.group9.final_project;
 import android.app.FragmentTransaction;
 import android.app.Fragment;
 
-import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
-import android.content.ComponentName;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -73,13 +71,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         scheduler.cancelAll();
 
         //Start new job
-        ComponentName serviceName = new ComponentName(context, GranularDataJobService.class);
+        //TODO Switch to https://developer.android.com/training/scheduling/alarms.html
+        /*ComponentName serviceName = new ComponentName(context, GranularDataJobService.class);
         JobInfo info = new JobInfo.Builder(jobID,serviceName)
-                .setPeriodic(1000*60)
+                .setPeriodic(1000*60*60) //1000 mils/s * 60s/min * 60min/h = once an hour
                 .setPersisted(true)
                 .build();
 
-        scheduler.schedule(info);
+        scheduler.schedule(info);*/
     }
 
     private void changeScreen(Screen newScreen){

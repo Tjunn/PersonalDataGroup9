@@ -5,7 +5,6 @@ import android.app.job.JobService;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.Calendar;
 
@@ -44,13 +43,11 @@ public class GranularDataJobService extends JobService {
         protected Void doInBackground(JobParameters... params) {
 
             Calendar date = Calendar.getInstance();
-            String text = "Running job for " + date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + ":" + date.get(Calendar.SECOND);
-            /*int duration = Toast.LENGTH_SHORT;
+            Log.d("granular","Storing data for: " + date.toString());
 
-            Toast toast = Toast.makeText(context, text, duration);
-            toast.show();*/
-
-            Log.d("Job",text);
+            //Store Stuff
+            GranularUsageStatsSQLiteHelper db = new GranularUsageStatsSQLiteHelper(context);
+            db.storeStats(DataManager.getDayUsageStats(context));
 
             JobParameters parameters = params[0];
             jobFinished(parameters,false);

@@ -58,7 +58,7 @@ public class UsageStatsFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new UsageStatsRecyclerViewAdapter(DataManager.getDayUsageStats(context), null));
+            recyclerView.setAdapter(new UsageStatsRecyclerViewAdapter(DataManager.getDayUsageStatsAsItems(context), null));
         }
         return view;
     }
