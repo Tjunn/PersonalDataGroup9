@@ -3,7 +3,6 @@ package personal_data_interaction.group9.final_project;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,10 +13,6 @@ import group9.assignment2.R;
 
 public class UsageStatsFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 1;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -26,40 +21,20 @@ public class UsageStatsFragment extends Fragment {
     public UsageStatsFragment() {
     }
 
-    // TODO: Customize parameter initialization
-    public static UsageStatsFragment newInstance(int columnCount) {
-        UsageStatsFragment fragment = new UsageStatsFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_usage_stats, container, false);
 
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
-    }
+        Context context = view.getContext();
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_result, container, false);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.fragment_usage_stats_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setAdapter(new UsageStatsRecyclerViewAdapter(DataManager.getDayUsageStatsAsItems(context), null));
 
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(new UsageStatsRecyclerViewAdapter(DataManager.getDayUsageStatsAsItems(context), null));
-        }
+        BarChart chart = (BarChart) view.findViewById(R.id.fragment_usage_stats_barchart);
+        chart.setData(DataManager.getDayUsageStatsAsItems(context),context);
+
         return view;
     }
 

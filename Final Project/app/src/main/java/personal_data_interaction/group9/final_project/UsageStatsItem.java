@@ -34,8 +34,6 @@ public class UsageStatsItem {
             icon = packageManager.getApplicationIcon(stats.getPackageName());
         } catch (PackageManager.NameNotFoundException ignored) {
         }
-        if(icon == null)
-            icon = packageManager.getDefaultActivityIcon();
 
         start = Calendar.getInstance();
         start.setTimeInMillis(stats.getFirstTimeStamp());

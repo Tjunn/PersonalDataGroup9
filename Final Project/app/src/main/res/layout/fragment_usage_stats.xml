@@ -8,12 +8,14 @@
         android:orientation="vertical"
         >
     <personal_data_interaction.group9.final_project.BarChart
+            android:id="@+id/fragment_usage_stats_barchart"
             custom:numBars="5"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="3"/>
+            android:layout_weight="3"
+            android:layout_margin="16dp"/>
     <android.support.v7.widget.RecyclerView
-            android:id="@+id/list"
+            android:id="@+id/fragment_usage_stats_list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"

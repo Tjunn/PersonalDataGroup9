@@ -2,13 +2,17 @@ package personal_data_interaction.group9.final_project;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.BlurMaskFilter;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.RectF;
+import android.graphics.*;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.support.v7.graphics.Palette;
 import android.util.AttributeSet;
 import android.view.View;
 import group9.assignment2.R;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Created by Tjunn on 29/03/2017.
@@ -23,9 +27,14 @@ public class BarChart extends View {
     private Paint shadowPaint;
     private float gutterWidth,barWidth;
     private float barHeight;
-
     private RectF[] rects;
-    private float[] values = new float[]{1.0f,0.9f,0.8f,0.7f,0.6f,0.5f,0.4f};
+
+    private long[] values;
+    private int[] colors;
+    private Drawable[] images;
+
+    private float width;
+    private float height;
 
     public BarChart(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -33,7 +42,7 @@ public class BarChart extends View {
         TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.BarChart, 0, 0);
 
         try {
-            numBars = a.getInteger(R.styleable.BarChart_numBars, 5);
+            setNumBars(a.getInteger(R.styleable.BarChart_numBars, 5));
         } finally {
             a.recycle();
         }
@@ -65,9 +74,17 @@ public class BarChart extends View {
 
         for(int i=0;i<numBars;i++)
         {
-            canvas.drawRect(rects[i], shadowPaint);
-            barPaint.setColor(0xFFFF0000);
-            canvas.drawRect(rects[i], barPaint);
+            RectF bar = rects[i];
+
+            canvas.drawRect(bar , shadowPaint);
+            if(colors != null && i < colors.length)
+                barPaint.setColor(colors[i]);
+            else
+                barPaint.setColor(Color.BLACK);
+            canvas.drawRect(bar , barPaint);
+
+            if(images != null && i < images.length)
+                images[i].draw(canvas);
         }
 
     }
@@ -78,25 +95,38 @@ public class BarChart extends View {
         float xPad = (float)(getPaddingLeft() + getPaddingRight());
         float yPad = (float)(getPaddingTop() + getPaddingBottom());
 
-        float ww = (float)w - xPad;
-        float hh = (float)h - yPad;
+        width = (float)w - xPad;
+        height = (float)h - yPad;
+        layoutBars();
+    }
 
-        gutterWidth = (ww*gutterWeight)/numGutters;
-        barWidth = (ww*(1.0f-gutterWeight))/numBars;
+    private void layoutBars(){
+        gutterWidth = (width*gutterWeight)/numGutters;
+        barWidth = (width*(1.0f-gutterWeight))/numBars;
 
-        barHeight = hh;
+        barHeight = height-(barWidth/2f);
+
+        float maxValue = 0f;
+        if( values != null && values.length > 0)
+            maxValue = (float)values[0];
 
         rects=new RectF[numBars];
         for(int i=0;i<numBars;i++)
         {
             float left = getPaddingLeft()+i*(barWidth+gutterWidth);
             float top = getPaddingTop();
-            rects[i] = new RectF(
+            long value = 0;
+            if( values != null && values.length > i)
+                value = values[i];
+            RectF bar = new RectF(
                     left,
-                    top+(1-values[i])*barHeight,
+                    top+(1-(value/maxValue))*barHeight,
                     left+barWidth,
                     top+barHeight
             );
+            rects[i] = bar;
+            if(images != null && i < images.length)
+                images[i].setBounds((int)bar.left,(int)(bar.bottom-(barWidth/2f)),(int)bar.right,(int)(bar.bottom+(barWidth/2f)));
         }
 
 
@@ -109,7 +139,62 @@ public class BarChart extends View {
     public void setNumBars(int numBars) {
         this.numBars = numBars;
         this.numGutters = numBars-1;
+        layoutBars();
         invalidate();
         //requestLayout();
+    }
+
+    public void setData(List<UsageStatsItem> data, Context context) {
+
+        Collections.sort(data, new Comparator<UsageStatsItem>() {
+            @Override
+            public int compare(UsageStatsItem o1, UsageStatsItem o2) {
+                return Long.compare(o1.getTotalTimeInForeground(),o2.getTotalTimeInForeground());
+            }
+        });
+        Collections.reverse(data);
+
+        values = new long[numBars];
+        colors = new int[numBars];
+        images = new Drawable[numBars];
+
+        for(int i = 0; i<numBars;i++){
+            UsageStatsItem item = data.get(i);
+            Bitmap icon = drawableToBitmap(item.getIcon());
+            Palette palette = Palette.from(icon).generate();
+            colors[i] = selectColorFromPalette(palette);
+            values[i] = item.getTotalTimeInForeground();
+            images[i] = item.getIcon();
+        }
+
+
+        layoutBars();
+        invalidate();
+    }
+
+    private int selectColorFromPalette(Palette palette) {
+        return palette.getDominantColor(0xFF000000);
+    }
+
+    private static Bitmap drawableToBitmap (Drawable drawable) {
+        Bitmap bitmap = null;
+
+        if (drawable instanceof BitmapDrawable) {
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+            if(bitmapDrawable.getBitmap() != null) {
+                return bitmapDrawable.getBitmap();
+            }
+        }
+
+        if(drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
+            bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
+        } else {
+            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        }
+
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
     }
 }
