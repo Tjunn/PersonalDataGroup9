@@ -37,10 +37,9 @@ public class UsageStatsFragment extends Fragment {
         Collections.sort(data, new Comparator<UsageStatsItem>() {
             @Override
             public int compare(UsageStatsItem o1, UsageStatsItem o2) {
-                return Long.compare(o1.getTotalTimeInForeground(),o2.getTotalTimeInForeground());
+                return Long.compare(o2.getTotalTimeInForeground(),o1.getTotalTimeInForeground());
             }
         });
-        Collections.reverse(data);
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.fragment_usage_stats_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));

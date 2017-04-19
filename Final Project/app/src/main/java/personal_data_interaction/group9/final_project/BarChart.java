@@ -21,9 +21,10 @@ public class BarChart extends View {
     private float gutterWeight = 0.1f;
     private Paint textPaint;
     private int textColor = 0xFFBDBDBD;
-    private float textHeight;
+    private float textHeight=12;
     private Paint barPaint;
     private Paint shadowPaint;
+    private Paint iconPaint;
     private float gutterWidth,barWidth;
     private float barHeight;
 
@@ -31,10 +32,11 @@ public class BarChart extends View {
     private long[] values;
     private int[] colors;
     private String[] texts;
-    private Drawable[] images;
+    private Bitmap[] images;
 
     private float width;
     private float height;
+
 
     public BarChart(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -88,8 +90,10 @@ public class BarChart extends View {
                 barPaint.setColor(Color.BLACK);
             canvas.drawRect(bar , barPaint);
 
-            if(images != null && i < images.length)
-                images[i].draw(canvas);
+            if(images != null && i < images.length) {
+                Bitmap bitmap = images[i];
+                canvas.drawBitmap(bitmap, bar.left + (barWidth-bitmap.getWidth())/2f , bar.bottom - bitmap.getHeight()/2f,null);
+            }
         }
 
     }
@@ -103,6 +107,7 @@ public class BarChart extends View {
         width = (float)w - xPad;
         height = (float)h - yPad;
         layoutBars();
+        invalidate();
     }
 
     private void layoutBars(){
@@ -130,8 +135,8 @@ public class BarChart extends View {
                     top+barHeight
             );
             rects[i] = bar;
-            if(images != null && i < images.length)
-                images[i].setBounds((int)bar.left,(int)(bar.bottom-(barWidth/2f)),(int)bar.right,(int)(bar.bottom+(barWidth/2f)));
+            /*if(images != null && i < images.length)
+                images[i].((int)bar.left,(int)(bar.bottom-(barWidth/2f)),(int)bar.right,(int)(bar.bottom+(barWidth/2f)));*/
         }
 
 
@@ -146,15 +151,14 @@ public class BarChart extends View {
         this.numGutters = numBars-1;
         layoutBars();
         invalidate();
-        //requestLayout();
     }
 
     public void setData(List<UsageStatsItem> data) {
 
         values = new long[numBars];
         colors = new int[numBars];
-        images = new Drawable[numBars];
         texts = new String[numBars];
+        images = new Bitmap[numBars];
 
         for(int i = 0; i<numBars;i++){
             UsageStatsItem item = data.get(i);
@@ -162,8 +166,8 @@ public class BarChart extends View {
             Palette palette = Palette.from(icon).generate();
             colors[i] = selectColorFromPalette(palette);
             values[i] = item.getTotalTimeInForeground();
-            images[i] = item.getIcon();
             texts[i] = DataManager.toHumanShortString(values[i]);
+            images[i] = icon;
         }
 
         layoutBars();
