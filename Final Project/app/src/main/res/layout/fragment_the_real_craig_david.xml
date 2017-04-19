@@ -1,0 +1,74 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="personal_data_interaction.group9.final_project.TheRealCraigDavid">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <TextView
+        android:id="@+id/tv_Big_Time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="5dp"
+        android:text="xxh xxm"
+        android:textAlignment="center"
+        android:textSize="50sp" />
+
+    <TextView
+        android:id="@+id/tv_Big_Time_Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Overtime last 7 days"
+        android:textAlignment="center" />
+
+    <personal_data_interaction.group9.final_project.BarChart
+        android:id="@+id/bc_7_Days"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        android:layout_weight="1"
+        custom:numBars="7" />
+
+    <LinearLayout
+        android:id="@+id/llh_Personal_Goal"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_Personal_Goal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:text="Personal Goal is #h per day" />
+
+        <ImageView
+            android:id="@+id/iv_Personal_Goal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            app:srcCompat="@android:drawable/btn_star_big_on" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_Small_Time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="hhx xxm"
+        android:textAlignment="center"
+        android:textSize="40sp" />
+
+    <TextView
+        android:id="@+id/tv_Small_Time_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="5dp"
+        android:text="Overtime last week"
+        android:textAlignment="center" />
+</LinearLayout>
