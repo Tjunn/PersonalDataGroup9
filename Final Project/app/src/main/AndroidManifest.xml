@@ -29,7 +29,7 @@
 
         <activity
             android:name="personal_data_interaction.group9.final_project.CraigDavid"
-            android:label="@string/title_activity_craig_david"
+            android:label="AppTrackr"
             android:screenOrientation="portrait">
 
         <intent-filter>
