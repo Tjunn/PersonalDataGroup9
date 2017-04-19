@@ -10,8 +10,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import group9.assignment2.R;
 
-import java.util.Collections;
-import java.util.Comparator;
+
 import java.util.List;
 
 /**
@@ -27,10 +26,11 @@ public class BarChart extends View {
     private Paint shadowPaint;
     private float gutterWidth,barWidth;
     private float barHeight;
-    private RectF[] rects;
 
+    private RectF[] rects;
     private long[] values;
     private int[] colors;
+    private String[] texts;
     private Drawable[] images;
 
     private float width;
@@ -58,6 +58,7 @@ public class BarChart extends View {
         } else {
             textPaint.setTextSize(textHeight);
         }
+        textPaint.setTextAlign(Paint.Align.CENTER);
 
         barPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         barPaint.setStyle(Paint.Style.FILL);
@@ -75,6 +76,10 @@ public class BarChart extends View {
         for(int i=0;i<numBars;i++)
         {
             RectF bar = rects[i];
+
+            if(texts != null && i < texts.length){
+                canvas.drawText(texts[i],bar.centerX(),bar.top,textPaint);
+            }
 
             canvas.drawRect(bar , shadowPaint);
             if(colors != null && i < colors.length)
@@ -144,19 +149,12 @@ public class BarChart extends View {
         //requestLayout();
     }
 
-    public void setData(List<UsageStatsItem> data, Context context) {
-
-        Collections.sort(data, new Comparator<UsageStatsItem>() {
-            @Override
-            public int compare(UsageStatsItem o1, UsageStatsItem o2) {
-                return Long.compare(o1.getTotalTimeInForeground(),o2.getTotalTimeInForeground());
-            }
-        });
-        Collections.reverse(data);
+    public void setData(List<UsageStatsItem> data) {
 
         values = new long[numBars];
         colors = new int[numBars];
         images = new Drawable[numBars];
+        texts = new String[numBars];
 
         for(int i = 0; i<numBars;i++){
             UsageStatsItem item = data.get(i);
@@ -165,8 +163,8 @@ public class BarChart extends View {
             colors[i] = selectColorFromPalette(palette);
             values[i] = item.getTotalTimeInForeground();
             images[i] = item.getIcon();
+            texts[i] = DataManager.toHumanShortString(values[i]);
         }
-
 
         layoutBars();
         invalidate();
@@ -177,7 +175,7 @@ public class BarChart extends View {
     }
 
     private static Bitmap drawableToBitmap (Drawable drawable) {
-        Bitmap bitmap = null;
+        Bitmap bitmap;
 
         if (drawable instanceof BitmapDrawable) {
             BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;

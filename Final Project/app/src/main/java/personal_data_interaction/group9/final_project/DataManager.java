@@ -145,4 +145,28 @@ public class DataManager {
     static List<UsageStatsItem> getDayUsageStatsAsItems(Context context) {
         return toUsageStatsItem(getDayUsageStats(context),context);
     }
+
+    public static String toHumanShortString(long milliseconds) {
+
+        if (milliseconds < 1000)
+            return "<1 sec";
+
+
+        int hours = (int) ((milliseconds / (1000 * 60 * 60)) % 24);
+        int days = (int) (milliseconds / (1000 * 60 * 60 * 24));
+
+        if(days != 0)
+            return String.format(Locale.getDefault(),"%d days %d hr", days, hours);
+
+        int minutes = (int) ((milliseconds / (1000 * 60)) % 60);
+        if(hours != 0)
+            return String.format(Locale.getDefault(),"%d hr %d min", hours, minutes);
+
+        if(minutes != 0)
+            return String.format(Locale.getDefault(),"%d min", minutes);
+
+        int seconds = (int) (milliseconds / 1000) % 60;
+        return String.format(Locale.getDefault(),"%d sec", seconds);
+
+    }
 }

@@ -46,8 +46,7 @@ public class UsageStatsRecyclerViewAdapter extends RecyclerView.Adapter<UsageSta
         holder.item = item;
         mValues.get(position);
 
-        double time = (item.getTotalTimeInForeground()/1000D)/60D;
-        holder.time.setText(String.format(Locale.getDefault(),"%,.1f",time)+" min");
+        holder.time.setText(DataManager.toHumanShortString(item.getTotalTimeInForeground()));
 
         holder.avatar.setImageDrawable(item.getIcon());
 

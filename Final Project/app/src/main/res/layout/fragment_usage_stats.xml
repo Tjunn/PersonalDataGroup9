@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<android.support.v4.widget.NestedScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:custom="http://schemas.android.com/apk/res-auto"
@@ -7,19 +7,29 @@
         android:layout_width="match_parent"
         android:orientation="vertical"
         >
-    <personal_data_interaction.group9.final_project.BarChart
-            android:id="@+id/fragment_usage_stats_barchart"
-            custom:numBars="5"
+    <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3"
-            android:layout_margin="16dp"/>
-    <android.support.v7.widget.RecyclerView
-            android:id="@+id/fragment_usage_stats_list"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            tools:listitem="@layout/item_usage"/>
-    <!--android:background="?android:windowBackground"-->
-</LinearLayout>
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:descendantFocusability="blocksDescendants"
+            >
+        <personal_data_interaction.group9.final_project.BarChart
+                android:id="@+id/fragment_usage_stats_barchart"
+                custom:numBars="5"
+                android:layout_width="match_parent"
+                android:layout_height="360dp"
+                android:layout_margin="16dp"/>
+
+        <android.support.v7.widget.RecyclerView
+                android:id="@+id/fragment_usage_stats_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/item_usage"/>
+        <!--android:background="?android:windowBackground"-->
+    </LinearLayout>
+
+
+
+
+</android.support.v4.widget.NestedScrollView>
 

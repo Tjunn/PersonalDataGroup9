@@ -3,12 +3,17 @@ package personal_data_interaction.group9.final_project;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import group9.assignment2.R;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 
 public class UsageStatsFragment extends Fragment {
@@ -28,12 +33,22 @@ public class UsageStatsFragment extends Fragment {
 
         Context context = view.getContext();
 
+        List<UsageStatsItem> data = DataManager.getDayUsageStatsAsItems(context);
+        Collections.sort(data, new Comparator<UsageStatsItem>() {
+            @Override
+            public int compare(UsageStatsItem o1, UsageStatsItem o2) {
+                return Long.compare(o1.getTotalTimeInForeground(),o2.getTotalTimeInForeground());
+            }
+        });
+        Collections.reverse(data);
+
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.fragment_usage_stats_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setAdapter(new UsageStatsRecyclerViewAdapter(DataManager.getDayUsageStatsAsItems(context), null));
+        recyclerView.setAdapter(new UsageStatsRecyclerViewAdapter(data, null));
+        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
 
         BarChart chart = (BarChart) view.findViewById(R.id.fragment_usage_stats_barchart);
-        chart.setData(DataManager.getDayUsageStatsAsItems(context),context);
+        chart.setData(data);
 
         return view;
     }
