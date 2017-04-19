@@ -10,32 +10,38 @@ import android.util.AttributeSet;
 import android.view.View;
 import group9.assignment2.R;
 
-
 import java.util.List;
 
 /**
  * Created by Tjunn on 29/03/2017.
  */
 public class BarChart extends View {
-    private int numBars,numGutters;
-    private float gutterWeight = 0.1f;
-    private Paint textPaint;
+    private int numBars;
+    private float gutterWeight = 0.2f;
     private int textColor = 0xFFBDBDBD;
-    private float textHeight=12;
-    private Paint barPaint;
-    private Paint shadowPaint;
-    private Paint iconPaint;
-    private float gutterWidth,barWidth;
-    private float barHeight;
+    private float textHeight = 24;
+    private float textBarPad = 6;
+    private float padForText = textHeight+textBarPad;
+    private float iconWeight = 0.9f;
 
-    private RectF[] rects;
+
+
+
     private long[] values;
     private int[] colors;
-    private String[] texts;
-    private Bitmap[] images;
+    private String[] barTexts;
+    private Bitmap[] icons;
 
+    // Calculated Values
+    private Paint barPaint;
+    private Paint shadowPaint;
+    private Paint textPaint;
     private float width;
     private float height;
+    private int numGutters;
+    private RectF[] barRects;
+    private Rect[] iconSrc;
+    private RectF[] iconDists;
 
 
     public BarChart(Context context, AttributeSet attrs) {
@@ -52,6 +58,7 @@ public class BarChart extends View {
         init();
     }
 
+    // Initialize Paints used for drawing
     private void init(){
         textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         textPaint.setColor(textColor);
@@ -77,10 +84,10 @@ public class BarChart extends View {
 
         for(int i=0;i<numBars;i++)
         {
-            RectF bar = rects[i];
+            RectF bar = barRects[i];
 
-            if(texts != null && i < texts.length){
-                canvas.drawText(texts[i],bar.centerX(),bar.top,textPaint);
+            if(barTexts != null && i < barTexts.length){
+                canvas.drawText(barTexts[i],bar.centerX(),bar.top - textBarPad,textPaint);
             }
 
             canvas.drawRect(bar , shadowPaint);
@@ -90,9 +97,9 @@ public class BarChart extends View {
                 barPaint.setColor(Color.BLACK);
             canvas.drawRect(bar , barPaint);
 
-            if(images != null && i < images.length) {
-                Bitmap bitmap = images[i];
-                canvas.drawBitmap(bitmap, bar.left + (barWidth-bitmap.getWidth())/2f , bar.bottom - bitmap.getHeight()/2f,null);
+            if(icons != null && i < icons.length) {
+                Bitmap bitmap = icons[i];
+                canvas.drawBitmap(bitmap,iconSrc[i],iconDists[i],null);
             }
         }
 
@@ -111,35 +118,59 @@ public class BarChart extends View {
     }
 
     private void layoutBars(){
-        gutterWidth = (width*gutterWeight)/numGutters;
-        barWidth = (width*(1.0f-gutterWeight))/numBars;
+        float gutterWidth = (width * gutterWeight) / numGutters;
+        float barWidth = (width * (1.0f - gutterWeight)) / numBars;
+        float halfIconSize = (barWidth * iconWeight)/2f;
 
-        barHeight = height-(barWidth/2f);
+        float barHeight = height - halfIconSize - padForText;
 
         float maxValue = 0f;
         if( values != null && values.length > 0)
             maxValue = (float)values[0];
 
-        rects=new RectF[numBars];
+        barRects = new RectF[numBars];
+        iconDists = new RectF[numBars];
         for(int i=0;i<numBars;i++)
         {
-            float left = getPaddingLeft()+i*(barWidth+gutterWidth);
-            float top = getPaddingTop();
+            float left = getPaddingLeft()+i*(barWidth + gutterWidth);
+            float top = getPaddingTop()+ padForText;
             long value = 0;
             if( values != null && values.length > i)
                 value = values[i];
             RectF bar = new RectF(
                     left,
-                    top+(1-(value/maxValue))*barHeight,
-                    left+barWidth,
-                    top+barHeight
+                    top+(1-(value/maxValue))* barHeight,
+                    left+ barWidth,
+                    top+ barHeight
             );
-            rects[i] = bar;
-            /*if(images != null && i < images.length)
-                images[i].((int)bar.left,(int)(bar.bottom-(barWidth/2f)),(int)bar.right,(int)(bar.bottom+(barWidth/2f)));*/
+            barRects[i] = bar;
+            iconDists[i] = new RectF(bar.centerX()- halfIconSize,bar.bottom- halfIconSize,bar.centerX()+ halfIconSize,bar.bottom+ halfIconSize);
         }
 
 
+    }
+
+    public void setData(List<UsageStatsItem> data) {
+
+        values = new long[numBars];
+        colors = new int[numBars];
+        barTexts = new String[numBars];
+        icons = new Bitmap[numBars];
+        iconSrc = new Rect[numBars];
+
+        for(int i = 0; i<numBars;i++){
+            UsageStatsItem item = data.get(i);
+            Bitmap icon = drawableToBitmap(item.getIcon());
+            Palette palette = Palette.from(icon).generate();
+            colors[i] = selectColorFromPalette(palette);
+            values[i] = item.getTotalTimeInForeground();
+            barTexts[i] = DataManager.toHumanShortString(values[i]);
+            icons[i] = icon;
+            iconSrc[i] = new Rect(0,0,icon.getWidth(),icon.getHeight());
+        }
+
+        layoutBars();
+        invalidate();
     }
 
     public int getNumBars() {
@@ -153,26 +184,7 @@ public class BarChart extends View {
         invalidate();
     }
 
-    public void setData(List<UsageStatsItem> data) {
 
-        values = new long[numBars];
-        colors = new int[numBars];
-        texts = new String[numBars];
-        images = new Bitmap[numBars];
-
-        for(int i = 0; i<numBars;i++){
-            UsageStatsItem item = data.get(i);
-            Bitmap icon = drawableToBitmap(item.getIcon());
-            Palette palette = Palette.from(icon).generate();
-            colors[i] = selectColorFromPalette(palette);
-            values[i] = item.getTotalTimeInForeground();
-            texts[i] = DataManager.toHumanShortString(values[i]);
-            images[i] = icon;
-        }
-
-        layoutBars();
-        invalidate();
-    }
 
     private int selectColorFromPalette(Palette palette) {
         return palette.getDominantColor(0xFF000000);

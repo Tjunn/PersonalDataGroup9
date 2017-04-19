@@ -13,11 +13,47 @@
             android:orientation="vertical"
             android:descendantFocusability="blocksDescendants"
             >
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+
+            <Button android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    style="@android:style/Widget.Material.Button.Borderless.Colored"
+                    android:text="today">
+
+            </Button>
+            <Button android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    style="@android:style/Widget.Material.Button.Borderless"
+                    android:text="last week">
+
+            </Button>
+            <Button android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    style="@android:style/Widget.Material.Button.Borderless"
+                    android:text="last month">
+
+            </Button>
+        </LinearLayout>
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="4Days 3hr"
+                style="@android:style/TextAppearance.Material.Display1"/>
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Spent On Top 5"/>
         <personal_data_interaction.group9.final_project.BarChart
                 android:id="@+id/fragment_usage_stats_barchart"
                 custom:numBars="5"
                 android:layout_width="match_parent"
-                android:layout_height="360dp"
+                android:layout_height="260dp"
                 android:layout_margin="16dp"/>
 
         <android.support.v7.widget.RecyclerView
