@@ -73,59 +73,54 @@ public class TheRealCraigDavid extends Fragment {
         }
     }
 
+    // The code above this point is untouched, expect the import statements
 
+    // Creating the different UI elements used
     TextView tvBigTime, tvBigTimeTitle, tvSmallTime, tvSmallTimeTitle, tvPersonalGoal;
     ImageView ivPersonalGoal;
     HistogramBarChart bc7Days;
 
-    int personalGoal = 2;
+    // Variables to store personal goal (and temporary personal goal when changed by user)
+    int personalGoal;
     int tmpPersonalGoal;
 
-    private void showRadioButtonDialog() {
 
-        // custom dialog
+    // Method to change personal goal when goal when user press the pencil icon
+    // The method creates a dialog box with 11 radio buttons (1-10 hours) and two buttons (Cancel and Ok)
+    private void showRadioButtonDialog() {
+        // Creating the custom dialog screen, mainly the 10 radio buttons
+        // The dialog box builds upon the radiobutton_dialog.xml file
         final Dialog dialog = new Dialog(this.getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        //dialog.setTitle("Set Personal Goal");
         dialog.setContentView(R.layout.radiobutton_dialog);
-        List<String> stringList=new ArrayList<>();  // here is list
+
+        // Create a list of 11 strings with the text for each radio button
+        List<String> stringList = new ArrayList<>();  // here is list
         stringList.add(1+" hour");
         for(int i=1;i<10;i++) {
             stringList.add((i + 1)+" hours");
         }
-        RadioGroup rg = (RadioGroup) dialog.findViewById(R.id.radio_group);
 
+        // Create radiogroup
+        final RadioGroup rg = (RadioGroup) dialog.findViewById(R.id.radio_group);
+        // Create each radio button and add to radiogroup
         for(int i=0;i<stringList.size();i++){
-            RadioButton rb=new RadioButton(this.getActivity()); // dynamically creating RadioButton and adding to RadioGroup.
+            RadioButton rb = new RadioButton(this.getActivity()); // dynamically creating RadioButton and adding to RadioGroup.
             rb.setText(stringList.get(i));
             rb.setPadding(50,0,0,0);
             rg.addView(rb);
+            // Make sure that the current personal goal is checked
             if(personalGoal == i+1){
                 rb.setChecked(true);
             }
         }
 
-        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                int childCount = group.getChildCount();
-                for (int x = 0; x < childCount; x++) {
-                    RadioButton btn = (RadioButton) group.getChildAt(x);
-                    if (btn.getId() == checkedId) {
-                        Log.e("selected RadioButton->",btn.getText().toString());
-
-                        tmpPersonalGoal = Integer.parseInt(btn.getText().toString().split(" ")[0]);
-
-
-                    }
-                }
-            }
-        });
-
+        // Create buttons for Ok and Cancel
         Button btOK, btCANCEL;
         btOK = (Button) dialog.findViewById(R.id.btOk);
         btCANCEL = (Button) dialog.findViewById(R.id.btCancel);
 
+        // When Cancel is presses, the dialog is dismissed
         btCANCEL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -133,32 +128,31 @@ public class TheRealCraigDavid extends Fragment {
             }
         });
 
-
+        // When Ok is presses, the personal goal is set to the checked radiobutton
         btOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                personalGoal = tmpPersonalGoal;
+                // Get id (hours) of checked radio button
+                int rbID = rg.getCheckedRadioButtonId();
+                View rbViev = rg.findViewById(rbID);
+                // Set the personal goal correspondingly
+                personalGoal = rg.indexOfChild(rbViev)+1;
+                // Update textview
                 tvPersonalGoal.setText("Personal Goal is " + personalGoal +"h per day");
 
+                // Save personal goal to shared preferences so it isn't lost when app is closed
                 SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putInt("PersonalGoal", personalGoal);
                 editor.commit();
 
-
-
+                // Close dialog box
                 dialog.dismiss();
             }
         });
-
-
         dialog.show();
-
     }
 
-    void setPersonalGoal(){
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -167,6 +161,7 @@ public class TheRealCraigDavid extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_the_real_craig_david, container, false);
 
+        // Binding the UI elements
         tvBigTime = (TextView) view.findViewById(R.id.tv_Big_Time);
         tvBigTimeTitle = (TextView) view.findViewById(R.id.tv_Big_Time_Title);
         tvSmallTime = (TextView) view.findViewById(R.id.tv_Small_Time);
@@ -178,12 +173,14 @@ public class TheRealCraigDavid extends Fragment {
         Context context = view.getContext();
         bc7Days.setData(DataManager.getLast7Days(context),2*60*60*1000);
 
+        // Load personal goal from shared preferences, if no prior personal goal has been set, the default is 2 hours
         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
         long tmp = sharedPref.getInt("PersonalGoal", 2);
         personalGoal = (int) tmp;
 
+        // Update the textview for personal goal
         tvPersonalGoal.setText("Personal Goal is " + personalGoal +"h per day");
-
+        // Set pencil icon to launch dialog box to change personal goal
         ivPersonalGoal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -191,12 +188,11 @@ public class TheRealCraigDavid extends Fragment {
             }
         });
 
-
-
-
-
         return view;
     }
+
+
+    // The code below this point is untouched
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
