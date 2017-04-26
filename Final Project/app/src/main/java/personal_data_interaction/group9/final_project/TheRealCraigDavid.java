@@ -1,28 +1,20 @@
 package personal_data_interaction.group9.final_project;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.Fragment;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
-import android.widget.Toast;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
+import android.widget.*;
 import group9.assignment2.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -76,61 +68,88 @@ public class TheRealCraigDavid extends Fragment {
         }
     }
 
+    // The code above this point is untouched, expect the import statements
 
+    // Creating the different UI elements used
     TextView tvBigTime, tvBigTimeTitle, tvSmallTime, tvSmallTimeTitle, tvPersonalGoal;
     ImageView ivPersonalGoal;
     HistogramBarChart bc7Days;
 
-    int personalGoal = 2;
+    // Variables to store personal goal (and temporary personal goal when changed by user)
+    int personalGoal;
     int tmpPersonalGoal;
 
+
+    // Method to change personal goal when goal when user press the pencil icon
+    // The method creates a dialog box with 11 radio buttons (1-10 hours) and two buttons (Cancel and Ok)
     private void showRadioButtonDialog() {
-        // custom dialog
+        // Creating the custom dialog screen, mainly the 10 radio buttons
+        // The dialog box builds upon the radiobutton_dialog.xml file
         final Dialog dialog = new Dialog(this.getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        //dialog.setTitle("Set Personal Goal");
         dialog.setContentView(R.layout.radiobutton_dialog);
-        List<String> stringList=new ArrayList<>();  // here is list
+
+        // Create a list of 11 strings with the text for each radio button
+        List<String> stringList = new ArrayList<>();  // here is list
         stringList.add(1+" hour");
         for(int i=1;i<10;i++) {
             stringList.add((i + 1)+" hours");
         }
-        RadioGroup rg = (RadioGroup) dialog.findViewById(R.id.radio_group);
 
+        // Create radiogroup
+        final RadioGroup rg = (RadioGroup) dialog.findViewById(R.id.radio_group);
+        // Create each radio button and add to radiogroup
         for(int i=0;i<stringList.size();i++){
-            RadioButton rb=new RadioButton(this.getActivity()); // dynamically creating RadioButton and adding to RadioGroup.
+            RadioButton rb = new RadioButton(this.getActivity()); // dynamically creating RadioButton and adding to RadioGroup.
             rb.setText(stringList.get(i));
             rb.setPadding(50,0,0,0);
             rg.addView(rb);
+            // Make sure that the current personal goal is checked
             if(personalGoal == i+1){
                 rb.setChecked(true);
             }
         }
-        boolean checkRadioButton = true;
-        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 
+        // Create buttons for Ok and Cancel
+        Button btOK, btCANCEL;
+        btOK = (Button) dialog.findViewById(R.id.btOk);
+        btCANCEL = (Button) dialog.findViewById(R.id.btCancel);
+
+        // When Cancel is presses, the dialog is dismissed
+        btCANCEL.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                int childCount = group.getChildCount();
-                for (int x = 0; x < childCount; x++) {
-                    RadioButton btn = (RadioButton) group.getChildAt(x);
-                    if (btn.getId() == checkedId) {
-                        Log.e("selected RadioButton->",btn.getText().toString());
-                        tmpPersonalGoal = Integer.parseInt(btn.getText().toString().substring(0, 1));
-
-
-                    }
-                }
+            public void onClick(View view) {
+                dialog.dismiss();
             }
         });
 
+        // When Ok is presses, the personal goal is set to the checked radiobutton
+        btOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Get id (hours) of checked radio button
+                int rbID = rg.getCheckedRadioButtonId();
+                View rbViev = rg.findViewById(rbID);
+                // Set the personal goal correspondingly
+                personalGoal = rg.indexOfChild(rbViev)+1;
+                // Update textview abd barchart
+                tvPersonalGoal.setText("Personal Goal is " + personalGoal +"h per day");
+                Context context = view.getContext();
+                bc7Days.setData(DataManager.getLast7Days(context),personalGoal*60*60*1000);
+
+                // Save personal goal to shared preferences so it isn't lost when app is closed
+                SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putInt("PersonalGoal", personalGoal);
+                editor.commit();
+
+                // Close dialog box
+                dialog.dismiss();
+            }
+        });
         dialog.show();
-
     }
 
-    void setPersonalGoal(){
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -139,6 +158,7 @@ public class TheRealCraigDavid extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_the_real_craig_david, container, false);
 
+        // Binding the UI elements
         tvBigTime = (TextView) view.findViewById(R.id.tv_Big_Time);
         tvBigTimeTitle = (TextView) view.findViewById(R.id.tv_Big_Time_Title);
         tvSmallTime = (TextView) view.findViewById(R.id.tv_Small_Time);
@@ -147,9 +167,19 @@ public class TheRealCraigDavid extends Fragment {
         ivPersonalGoal = (ImageView) view.findViewById(R.id.iv_Personal_Goal);
         bc7Days = (HistogramBarChart) view.findViewById(R.id.bc_7_Days);
 
-        Context context = view.getContext();
-        bc7Days.setData(DataManager.getLast7Days(context),2*60*60*1000);
 
+
+        // Load personal goal from shared preferences, if no prior personal goal has been set, the default is 2 hours
+        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        long tmp = sharedPref.getInt("PersonalGoal", 2);
+        personalGoal = (int) tmp;
+        // Set bar chart
+        Context context = view.getContext();
+        bc7Days.setData(DataManager.getLast7Days(context),personalGoal*60*60*1000);
+
+        // Update the textview for personal goal
+        tvPersonalGoal.setText("Personal Goal is " + personalGoal +"h per day");
+        // Set pencil icon to launch dialog box to change personal goal
         ivPersonalGoal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -159,6 +189,9 @@ public class TheRealCraigDavid extends Fragment {
 
         return view;
     }
+
+
+    // The code below this point is untouched
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
