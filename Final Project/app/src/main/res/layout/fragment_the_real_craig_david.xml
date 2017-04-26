@@ -69,6 +69,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="5dp"
-        android:text="Overtime last week"
+        android:text="Daily average"
         android:textAlignment="center" />
 </LinearLayout>

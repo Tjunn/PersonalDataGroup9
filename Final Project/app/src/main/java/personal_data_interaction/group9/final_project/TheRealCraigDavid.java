@@ -3,6 +3,7 @@ package personal_data_interaction.group9.final_project;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -80,6 +82,7 @@ public class TheRealCraigDavid extends Fragment {
     int tmpPersonalGoal;
 
     private void showRadioButtonDialog() {
+
         // custom dialog
         final Dialog dialog = new Dialog(this.getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -101,9 +104,8 @@ public class TheRealCraigDavid extends Fragment {
                 rb.setChecked(true);
             }
         }
-        boolean checkRadioButton = true;
-        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 
+        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 int childCount = group.getChildCount();
@@ -111,13 +113,44 @@ public class TheRealCraigDavid extends Fragment {
                     RadioButton btn = (RadioButton) group.getChildAt(x);
                     if (btn.getId() == checkedId) {
                         Log.e("selected RadioButton->",btn.getText().toString());
-                        tmpPersonalGoal = Integer.parseInt(btn.getText().toString().substring(0, 1));
+
+                        tmpPersonalGoal = Integer.parseInt(btn.getText().toString().split(" ")[0]);
 
 
                     }
                 }
             }
         });
+
+        Button btOK, btCANCEL;
+        btOK = (Button) dialog.findViewById(R.id.btOk);
+        btCANCEL = (Button) dialog.findViewById(R.id.btCancel);
+
+        btCANCEL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+
+        btOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                personalGoal = tmpPersonalGoal;
+                tvPersonalGoal.setText("Personal Goal is " + personalGoal +"h per day");
+
+                SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putInt("PersonalGoal", personalGoal);
+                editor.commit();
+
+
+
+                dialog.dismiss();
+            }
+        });
+
 
         dialog.show();
 
@@ -145,12 +178,22 @@ public class TheRealCraigDavid extends Fragment {
         Context context = view.getContext();
         bc7Days.setData(DataManager.getLast7Days(context),2*60*60*1000);
 
+        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        long tmp = sharedPref.getInt("PersonalGoal", 2);
+        personalGoal = (int) tmp;
+
+        tvPersonalGoal.setText("Personal Goal is " + personalGoal +"h per day");
+
         ivPersonalGoal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showRadioButtonDialog();
             }
         });
+
+
+
+
 
         return view;
     }
