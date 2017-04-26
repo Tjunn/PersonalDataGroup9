@@ -228,7 +228,7 @@ public class HistogramBarChart extends View {
 
             }
         });
-        
+
         layoutBars();
         invalidate();
     }
