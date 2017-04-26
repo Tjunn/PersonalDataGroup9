@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.annimon.stream.Stream;
 import group9.assignment2.R;
 
 import java.util.Collections;
@@ -33,13 +34,12 @@ public class UsageStatsFragment extends Fragment {
 
         Context context = view.getContext();
 
-        List<UsageStatsItem> data = DataManager.getDayUsageStatsAsItems(context);
-        Collections.sort(data, new Comparator<UsageStatsItem>() {
+        List<UsageStatsItem> data = DataManager.getToday(context).sorted(new Comparator<UsageStatsItem>() {
             @Override
             public int compare(UsageStatsItem o1, UsageStatsItem o2) {
                 return Long.compare(o2.getTotalTimeInForeground(),o1.getTotalTimeInForeground());
             }
-        });
+        }).toList();
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.fragment_usage_stats_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));

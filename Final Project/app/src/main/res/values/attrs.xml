@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="numBars" format="integer" />
     <declare-styleable name="BarChart">
-        <attr name="numBars" format="integer" />
+        <attr name="numBars"/>
+    </declare-styleable>
+    <declare-styleable name="HistogramBarChart">
+        <attr name="numBars"/>
     </declare-styleable>
 </resources>

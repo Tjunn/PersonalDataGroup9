@@ -47,7 +47,8 @@ public class GranularDataJobService extends JobService {
 
             //Store Stuff
             GranularUsageStatsSQLiteHelper db = new GranularUsageStatsSQLiteHelper(context);
-            db.storeStats(DataManager.getDayUsageStats(context));
+            //TODO: Store Correctly
+            //db.storeStats(DataManager.getDayUsageStats(context));
 
             JobParameters parameters = params[0];
             jobFinished(parameters,false);
