@@ -1,16 +1,25 @@
 package personal_data_interaction.group9.final_project;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -74,6 +83,50 @@ public class TheRealCraigDavid extends Fragment {
     ImageView ivPersonalGoal;
     BarChart bc7Days;
 
+    int personalGoal = 2;
+    int tmpPersonalGoal;
+
+    private void showRadioButtonDialog() {
+        // custom dialog
+        final Dialog dialog = new Dialog(this.getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.radiobutton_dialog);
+        List<String> stringList=new ArrayList<>();  // here is list
+        stringList.add(1+" hour");
+        for(int i=1;i<10;i++) {
+            stringList.add((i + 1)+" hours");
+        }
+        RadioGroup rg = (RadioGroup) dialog.findViewById(R.id.radio_group);
+
+        for(int i=0;i<stringList.size();i++){
+            RadioButton rb=new RadioButton(this.getActivity()); // dynamically creating RadioButton and adding to RadioGroup.
+            rb.setText(stringList.get(i));
+            rg.addView(rb);
+        }
+        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                int childCount = group.getChildCount();
+                for (int x = 0; x < childCount; x++) {
+                    RadioButton btn = (RadioButton) group.getChildAt(x);
+                    if (btn.getId() == checkedId) {
+                        Log.e("selected RadioButton->",btn.getText().toString());
+                        tmpPersonalGoal = Integer.parseInt(btn.getText().toString().substring(0, 1));
+
+                    }
+                }
+            }
+        });
+
+        dialog.show();
+
+    }
+
+    void setPersonalGoal(){
+
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -99,6 +152,13 @@ public class TheRealCraigDavid extends Fragment {
         });
 
         bc7Days.setData(data);
+
+        ivPersonalGoal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showRadioButtonDialog();
+            }
+        });
 
         return view;
     }
