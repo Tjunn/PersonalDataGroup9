@@ -13,17 +13,17 @@ import java.util.Calendar;
 public class UsageStatsItem {
 
     private Calendar end, start, lastTimeUsed;
-    private UsageStats stats;
-    private CharSequence label;
+    private String label;
     private Drawable icon;
+    private long totalTimeInForeground;
+    UsageStats stats;
+
 
     public UsageStatsItem(UsageStats stats, PackageManager packageManager){
-        this.stats = stats;
-
         //Get Application Label
         try {
             ApplicationInfo info = packageManager.getApplicationInfo(stats.getPackageName(), PackageManager.GET_META_DATA);
-            label = packageManager.getApplicationLabel(info);
+            label = packageManager.getApplicationLabel(info).toString();
         } catch (PackageManager.NameNotFoundException ignored) {
         }
         if(label == null)
@@ -43,15 +43,19 @@ public class UsageStatsItem {
 
         lastTimeUsed = Calendar.getInstance();
         lastTimeUsed.setTimeInMillis(stats.getLastTimeUsed());
+
+        totalTimeInForeground = stats.getTotalTimeInForeground();
+
+        this.stats = stats;
     }
 
 
 
     public long getTotalTimeInForeground() {
-        return stats.getTotalTimeInForeground();
+        return totalTimeInForeground;
     }
 
-    public CharSequence getLabel() {
+    public String getLabel() {
         return label;
     }
 
@@ -69,5 +73,21 @@ public class UsageStatsItem {
 
     public Drawable getIcon() {
         return icon;
+    }
+
+    public void combine(UsageStatsItem item) {
+        if(!label.equals(item.label))
+            throw new IllegalArgumentException("UsageStatsItem do not have the same Labels and cant be combined");
+
+        if(item.start.before(start))
+            start = item.start;
+
+        if(item.end.after(end))
+            end = item.end;
+
+        if(item.lastTimeUsed.after(lastTimeUsed))
+            lastTimeUsed = item.lastTimeUsed;
+
+        totalTimeInForeground += item.totalTimeInForeground;
     }
 }

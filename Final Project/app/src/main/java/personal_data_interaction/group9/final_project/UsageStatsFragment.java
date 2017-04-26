@@ -47,7 +47,7 @@ public class UsageStatsFragment extends Fragment {
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
 
         BarChart chart = (BarChart) view.findViewById(R.id.fragment_usage_stats_barchart);
-        chart.setData(data);
+        chart.setData(Stream.of(data));
 
         return view;
     }

@@ -43,35 +43,6 @@ public class DataManager {
         }
     }
 
-    private static Stream<UsageStats> getDayUsageStats(final Context context){
-
-        Calendar beginCal = Calendar.getInstance();
-        beginCal.roll(Calendar.DAY_OF_YEAR,-1);
-
-        Calendar endCal = Calendar.getInstance();
-
-        return Stream.of(getUsageStats(context,beginCal,endCal)).filter(new Predicate<UsageStats>() {
-            @Override
-            public boolean test(UsageStats value) {
-                Calendar start = Calendar.getInstance();
-                start.setTimeInMillis(value.getFirstTimeStamp());
-                Calendar end = Calendar.getInstance();
-                end.setTimeInMillis(value.getLastTimeStamp());
-                return start.get(Calendar.DAY_OF_YEAR) == end.get(Calendar.DAY_OF_YEAR) && start.get(Calendar.YEAR) == end.get(Calendar.YEAR);
-            }
-        });
-    }
-
-    private static Stream<UsageStats> getLast7DaysUsageStats(final Context context){
-
-        Calendar beginCal = Calendar.getInstance();
-        beginCal.roll(Calendar.DAY_OF_YEAR,-7);
-
-        Calendar endCal = Calendar.getInstance();
-
-        return Stream.of(getUsageStats(context,beginCal,endCal));
-    }
-
     private static Stream<UsageStatsItem> toUsageStatsItem(Stream<UsageStats> usageStats, Context context){
         final PackageManager manager = context.getPackageManager();
         return  usageStats
@@ -86,6 +57,15 @@ public class DataManager {
                         return new UsageStatsItem(usageStats, manager);
                     }
                 });
+    }
+
+    private static Stream<UsageStats> getLastDaysUsageStats(int days, Context context) {
+        Calendar beginCal = Calendar.getInstance();
+        beginCal.roll(Calendar.DATE,-days);
+
+        Calendar endCal = Calendar.getInstance();
+
+        return Stream.of(getUsageStats(context,beginCal,endCal));
     }
 
     private static List<UsageStats> getUsageStats(final Context context, Calendar beginCal, Calendar endCal){
@@ -129,17 +109,34 @@ public class DataManager {
     }
 
     static Stream<UsageStatsItem> getToday(Context context) {
-        return toUsageStatsItem(getDayUsageStats(context),context);
+        return toUsageStatsItem(getLastDaysUsageStats(1,context)
+                .filter(new Predicate<UsageStats>() {
+            @Override
+            public boolean test(UsageStats value) {
+                    Calendar start = Calendar.getInstance();
+                    start.setTimeInMillis(value.getFirstTimeStamp());
+                    Calendar end = Calendar.getInstance();
+                    end.setTimeInMillis(value.getLastTimeStamp());
+                    return start.get(Calendar.DAY_OF_YEAR) == end.get(Calendar.DAY_OF_YEAR) && start.get(Calendar.YEAR) == end.get(Calendar.YEAR);
+            }
+        }),context);
     }
 
     static Stream<UsageStatsItem> getLast7Days(Context context) {
-        return toUsageStatsItem(getLast7DaysUsageStats(context),context);
+        return toUsageStatsItem(getLastDaysUsageStats(7,context), context);
     }
+
+
+    /*static Stream<UsageStatsItem> getLast30Days(Context context) {
+        return toUsageStatsItem(getLastMonthUsageStats(context),context);
+    }*/
+
+
 
     static String toHumanShortString(long milliseconds) {
 
         if (milliseconds < 1000)
-            return "<1 sec";
+            return "<1 s";
 
 
         int hours = (int) ((milliseconds / (1000 * 60 * 60)) % 24);

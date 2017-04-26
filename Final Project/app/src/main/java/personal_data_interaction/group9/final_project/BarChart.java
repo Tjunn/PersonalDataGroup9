@@ -8,8 +8,13 @@ import android.graphics.drawable.Drawable;
 import android.support.v7.graphics.Palette;
 import android.util.AttributeSet;
 import android.view.View;
+import com.annimon.stream.Stream;
+import com.annimon.stream.function.Consumer;
+import com.annimon.stream.function.Function;
 import group9.assignment2.R;
 
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -86,6 +91,9 @@ public class BarChart extends View {
         {
             RectF bar = barRects[i];
 
+            if(values[i] == 0)
+                continue;
+
             if(barTexts != null && i < barTexts.length){
                 canvas.drawText(barTexts[i],bar.centerX(),bar.top - textBarPad,textPaint);
             }
@@ -150,7 +158,28 @@ public class BarChart extends View {
 
     }
 
-    public void setData(List<UsageStatsItem> data) {
+    public void setData(Stream<UsageStatsItem> data) {
+
+        final HashMap<String,UsageStatsItem> map = new HashMap<>();
+        data.forEach(new Consumer<UsageStatsItem>() {
+            @Override
+            public void accept(UsageStatsItem item) {
+                if(!map.containsKey(item.getLabel())){
+                    map.put(item.getLabel(),item);
+                    return;
+                }
+
+                map.get(item.getLabel()).combine(item);
+            }
+        });
+
+        List<UsageStatsItem> sorted_data = Stream.of(map.values())
+                .sorted(new Comparator<UsageStatsItem>() {
+                    @Override
+                    public int compare(UsageStatsItem o1, UsageStatsItem o2) {
+                        return Long.compare(o2.getTotalTimeInForeground(),o1.getTotalTimeInForeground());
+                    }
+                }).toList();
 
         values = new long[numBars];
         colors = new int[numBars];
@@ -159,7 +188,17 @@ public class BarChart extends View {
         iconSrc = new Rect[numBars];
 
         for(int i = 0; i<numBars;i++){
-            UsageStatsItem item = data.get(i);
+
+            if(i >= sorted_data.size()) {
+                colors[i] = textColor;
+                values[i] = 0;
+                barTexts[i] = "";
+                icons[i] = null;
+                iconSrc[i] = null;
+                continue;
+            }
+
+            UsageStatsItem item = sorted_data.get(i);
             Bitmap icon = drawableToBitmap(item.getIcon());
             Palette palette = Palette.from(icon).generate();
             colors[i] = selectColorFromPalette(palette);

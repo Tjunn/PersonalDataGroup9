@@ -76,7 +76,7 @@ public class CraigDavid extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        changeScreen(Screen.DAVID);
+        changeScreen(Screen.USAGE_STATS);
     }
 
     public enum Screen {DAVID, USAGE_STATS}

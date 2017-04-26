@@ -54,13 +54,15 @@ public class UsageStatsRecyclerViewAdapter extends RecyclerView.Adapter<UsageSta
 
         //holder.start.setText(String.format(Locale.getDefault(),"%tF",item.getStart()));
         //holder.start.setText(String.format(Locale.ROOT,"%tc",item.getStart()));
-        holder.start.setText(String.format(Locale.getDefault(),"%1$td %1$tb %1$tT",item.getStart()));
+        holder.start.setText(String.format(Locale.getDefault(),"%1$td %1$tb %1$tT %1$tY",item.getStart()));
         //holder.start.setText(String.format(Locale.ROOT,"%1$td %1$tb %1$tT %1$tZ",item.getStart()));
 
         //holder.end.setText(String.format(Locale.getDefault(),"%tF",item.getEnd()));
         //holder.end.setText(String.format(Locale.ROOT,"%tc",item.getEnd()));
-        holder.end.setText(String.format(Locale.getDefault(),"%1$td %1$tb %1$tT",item.getEnd()));
+        holder.end.setText(String.format(Locale.getDefault(),"%1$td %1$tb %1$tT %1$tY",item.getEnd()));
         //holder.end.setText(String.format(Locale.ROOT,"%1$td %1$tb %1$tT %1$tZ",item.getEnd()));
+
+        holder.last.setText(String.format(Locale.getDefault(),"%1$td %1$tb %1$tT",item.getLastTimeUsed()));
 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,6 +89,7 @@ public class UsageStatsRecyclerViewAdapter extends RecyclerView.Adapter<UsageSta
         TextView end;
         TextView name;
         TextView time;
+        TextView last;
         ImageView avatar;
 
         UsageStatsViewHolder(View view) {
@@ -98,6 +101,7 @@ public class UsageStatsRecyclerViewAdapter extends RecyclerView.Adapter<UsageSta
             name = (TextView) view.findViewById(R.id.item_usage_package);
             time = (TextView) view.findViewById(R.id.item_usage_time);
             avatar = (ImageView) view.findViewById(R.id.item_usage_avatar);
+            last = (TextView) view.findViewById(R.id.item_usage_last);
 
         }
 

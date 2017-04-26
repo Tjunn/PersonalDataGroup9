@@ -14,7 +14,7 @@
 
     <LinearLayout android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:layout_toStartOf="@+id/item_usage_time"
+                  android:layout_toStartOf="@+id/item_usage_last"
                   android:layout_marginStart="72dp"
                   android:orientation="vertical"
                   android:layout_centerVertical="true"
@@ -28,6 +28,7 @@
                 android:textSize="16sp"
                 android:id="@+id/item_usage_package"
                 android:textColor="@color/primaryTextColor"
+                android:maxLines="1"
         />
 
         <TextView
@@ -36,14 +37,18 @@
                 android:text="YYYY-MM-DD"
                 android:textSize="14sp"
                 android:textColor="@color/secondaryTextColor"
-                android:id="@+id/item_usage_start"/>
+                android:id="@+id/item_usage_start"
+                android:maxLines="1"
+                />
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="YYYY-MM-DD"
                 android:textSize="14sp"
                 android:textColor="@color/secondaryTextColor"
-                android:id="@+id/item_usage_end"/>
+                android:id="@+id/item_usage_end"
+                android:maxLines="1"/>
+
     </LinearLayout>
 
 
@@ -78,7 +83,15 @@
                 tools:ignore="RtlHardcoded"
         />
     </LinearLayout-->
-
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="YYYY-MM-DD"
+            android:textSize="14sp"
+            android:textColor="@color/secondaryTextColor"
+            android:layout_alignEnd="@+id/item_usage_time"
+            android:layout_above="@+id/item_usage_time"
+            android:id="@+id/item_usage_last"/>
 
     <TextView
             android:id="@id/item_usage_time"
