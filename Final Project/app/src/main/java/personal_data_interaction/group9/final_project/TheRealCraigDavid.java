@@ -11,8 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import group9.assignment2.R;
@@ -72,7 +70,7 @@ public class TheRealCraigDavid extends Fragment {
 
     TextView tvBigTime, tvBigTimeTitle, tvSmallTime, tvSmallTimeTitle, tvPersonalGoal;
     ImageView ivPersonalGoal;
-    BarChart bc7Days;
+    HistogramBarChart bc7Days;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -87,18 +85,10 @@ public class TheRealCraigDavid extends Fragment {
         tvSmallTimeTitle = (TextView) view.findViewById(R.id.tv_Small_Time_title);
         tvPersonalGoal = (TextView) view.findViewById(R.id.tv_Personal_Goal);
         ivPersonalGoal = (ImageView) view.findViewById(R.id.iv_Personal_Goal);
-        bc7Days = (BarChart) view.findViewById(R.id.bc_7_Days);
+        bc7Days = (HistogramBarChart) view.findViewById(R.id.bc_7_Days);
 
         Context context = view.getContext();
-        List<UsageStatsItem> data = DataManager.getDayUsageStatsAsItems(context);
-        Collections.sort(data, new Comparator<UsageStatsItem>() {
-            @Override
-            public int compare(UsageStatsItem o1, UsageStatsItem o2) {
-                return Long.compare(o2.getTotalTimeInForeground(),o1.getTotalTimeInForeground());
-            }
-        });
-
-        bc7Days.setData(data);
+        bc7Days.setData(DataManager.getLast7Days(context),2*60*60*1000);
 
         return view;
     }
