@@ -137,8 +137,10 @@ public class TheRealCraigDavid extends Fragment {
                 View rbViev = rg.findViewById(rbID);
                 // Set the personal goal correspondingly
                 personalGoal = rg.indexOfChild(rbViev)+1;
-                // Update textview
+                // Update textview abd barchart
                 tvPersonalGoal.setText("Personal Goal is " + personalGoal +"h per day");
+                Context context = view.getContext();
+                bc7Days.setData(DataManager.getLast7Days(context),personalGoal*60*60*1000);
 
                 // Save personal goal to shared preferences so it isn't lost when app is closed
                 SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
@@ -170,13 +172,15 @@ public class TheRealCraigDavid extends Fragment {
         ivPersonalGoal = (ImageView) view.findViewById(R.id.iv_Personal_Goal);
         bc7Days = (HistogramBarChart) view.findViewById(R.id.bc_7_Days);
 
-        Context context = view.getContext();
-        bc7Days.setData(DataManager.getLast7Days(context),2*60*60*1000);
+
 
         // Load personal goal from shared preferences, if no prior personal goal has been set, the default is 2 hours
         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
         long tmp = sharedPref.getInt("PersonalGoal", 2);
         personalGoal = (int) tmp;
+        // Set bar chart
+        Context context = view.getContext();
+        bc7Days.setData(DataManager.getLast7Days(context),personalGoal*60*60*1000);
 
         // Update the textview for personal goal
         tvPersonalGoal.setText("Personal Goal is " + personalGoal +"h per day");

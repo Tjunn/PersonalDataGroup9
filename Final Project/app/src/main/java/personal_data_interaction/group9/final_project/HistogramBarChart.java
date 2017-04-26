@@ -228,6 +228,9 @@ public class HistogramBarChart extends View {
 
             }
         });
+        
+        layoutBars();
+        invalidate();
     }
 
     public void setNumBars(int numBars) {
