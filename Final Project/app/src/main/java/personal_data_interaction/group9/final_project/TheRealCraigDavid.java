@@ -90,6 +90,7 @@ public class TheRealCraigDavid extends Fragment {
         // custom dialog
         final Dialog dialog = new Dialog(this.getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //dialog.setTitle("Set Personal Goal");
         dialog.setContentView(R.layout.radiobutton_dialog);
         List<String> stringList=new ArrayList<>();  // here is list
         stringList.add(1+" hour");
@@ -101,6 +102,7 @@ public class TheRealCraigDavid extends Fragment {
         for(int i=0;i<stringList.size();i++){
             RadioButton rb=new RadioButton(this.getActivity()); // dynamically creating RadioButton and adding to RadioGroup.
             rb.setText(stringList.get(i));
+            rb.setPadding(50,0,0,0);
             rg.addView(rb);
         }
         rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {

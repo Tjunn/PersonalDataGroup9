@@ -28,21 +28,25 @@
         android:paddingBottom="32dp"
         android:paddingStart="24dp">
 
-
     </RadioGroup>
 
 
     <TextView
         android:id="@+id/tvCancel"
-        android:layout_width="50dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Cancel" />
+        android:layout_marginLeft="50dp"
+        android:text="Cancel"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button"
+        android:textColor="@color/colorAccent" />
 
     <TextView
         android:id="@+id/tvOk"
-        android:layout_width="50dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="OK" />
+        android:text="OK"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button"
+        android:textColor="@color/colorAccent" />
 
 
 </LinearLayout>
