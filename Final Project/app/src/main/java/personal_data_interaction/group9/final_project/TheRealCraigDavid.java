@@ -104,7 +104,11 @@ public class TheRealCraigDavid extends Fragment {
             rb.setText(stringList.get(i));
             rb.setPadding(50,0,0,0);
             rg.addView(rb);
+            if(personalGoal == i+1){
+                rb.setChecked(true);
+            }
         }
+        boolean checkRadioButton = true;
         rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 
             @Override
@@ -115,6 +119,7 @@ public class TheRealCraigDavid extends Fragment {
                     if (btn.getId() == checkedId) {
                         Log.e("selected RadioButton->",btn.getText().toString());
                         tmpPersonalGoal = Integer.parseInt(btn.getText().toString().substring(0, 1));
+
 
                     }
                 }
