@@ -61,7 +61,7 @@ public class DataManager {
 
     private static Stream<UsageStats> getLastDaysUsageStats(int days, Context context) {
         Calendar beginCal = Calendar.getInstance();
-        beginCal.roll(Calendar.DATE,-days);
+        beginCal.add(Calendar.DATE,-days);
 
         Calendar endCal = Calendar.getInstance();
 
