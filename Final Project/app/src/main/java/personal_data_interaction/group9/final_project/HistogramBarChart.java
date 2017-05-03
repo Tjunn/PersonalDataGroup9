@@ -24,7 +24,7 @@ public class HistogramBarChart extends View {
     private float lineWith = 3f;
     private float textHeight = 24;
     private float textBarPad = 6;
-    private float yellowFactor = 0.9f;
+    private float yellowFactor = 0.8f;
     //private float padForText = textHeight+textBarPad;
 
     private int textColor = 0xFFBDBDBD;
