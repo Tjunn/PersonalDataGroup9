@@ -109,7 +109,7 @@ public class DataManager {
     }
 
     static Stream<UsageStatsItem> getToday(Context context) {
-        return toUsageStatsItem(getLastDaysUsageStats(1,context)
+        return toUsageStatsItem(getLastDaysUsageStats(1,context)/*
                 .filter(new Predicate<UsageStats>() {
             @Override
             public boolean test(UsageStats value) {
@@ -119,7 +119,7 @@ public class DataManager {
                     end.setTimeInMillis(value.getLastTimeStamp());
                     return start.get(Calendar.DAY_OF_YEAR) == end.get(Calendar.DAY_OF_YEAR) && start.get(Calendar.YEAR) == end.get(Calendar.YEAR);
             }
-        }),context);
+        })*/,context);
     }
 
     static Stream<UsageStatsItem> getLast7Days(Context context) {
