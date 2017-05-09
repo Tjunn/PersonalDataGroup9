@@ -59,9 +59,11 @@ public class CraigDavid extends AppCompatActivity {
                 case R.id.navigation_dashboard:
                     changeScreen(Screen.DAVID);
                     return true;
+                /*
                 case R.id.navigation_notifications:
                     //changeScreen(Screen.USAGE_STATS);
                     return true;
+                    */
             }
             return false;
         }
